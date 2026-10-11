@@ -8,6 +8,7 @@ import {
   IsString,
 } from 'class-validator';
 import { EmployeeStatus } from '../enums/employee-status.enum';
+import { Type } from 'class-transformer';
 
 export class CreateEmployeeDto {
   @IsNotEmpty()
@@ -35,10 +36,12 @@ export class CreateEmployeeDto {
   address?: string;
 
   @IsOptional()
+  @Type(() => Date)
   @IsDate()
   dob?: Date;
 
   @IsOptional()
+  @Type(() => Date)
   @IsDate()
   dateJoined?: Date;
 

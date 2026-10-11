@@ -12,7 +12,7 @@ export class Employee {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column({ name: 'employee_code' })
+  @Column({ name: 'employee_code', unique: true })
   employeeCode!: string;
 
   @Column({ name: 'first_name' })
@@ -21,7 +21,7 @@ export class Employee {
   @Column({ name: 'last_name', nullable: true })
   lastName?: string;
 
-  @Column()
+  @Column({ unique: true })
   nic!: string;
 
   @Column()
@@ -41,7 +41,7 @@ export class Employee {
     enum: EmployeeStatus,
     default: EmployeeStatus.INACTIVE,
   })
-  status?: EmployeeStatus;
+  status!: EmployeeStatus;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
