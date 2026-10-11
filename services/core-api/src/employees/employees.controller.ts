@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Inject,
   Param,
@@ -17,12 +18,12 @@ export class EmployeesController {
   constructor(@Inject() private readonly employeesService: EmployeesService) {}
 
   @Post()
-  public createEmployee(@Body() createEmployeeDto: CreateEmployeeDto) {
+  public create(@Body() createEmployeeDto: CreateEmployeeDto) {
     return this.employeesService.createEmployee(createEmployeeDto);
   }
 
   @Patch('/:id')
-  public updateEmployee(
+  public update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() patchEmployeeDto: PatchEmployeeDto,
   ) {
@@ -31,6 +32,16 @@ export class EmployeesController {
 
   @Get()
   public findAll() {
-    return this.employeesService.findAll();
+    return this.employeesService.findAllEmployees();
+  }
+
+  @Get('/:id')
+  public findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.employeesService.findOneEmployee(id);
+  }
+
+  @Delete('/:id')
+  public remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.employeesService.deleteEmployee(id);
   }
 }
