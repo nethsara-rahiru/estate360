@@ -26,7 +26,23 @@ export class EmployeesService {
     return await this.employeesRepository.save(employee);
   }
 
-  public async findAll() {
+  public async findAllEmployees() {
     return await this.employeesRepository.find();
+  }
+
+  public async findOneEmployee(id: string) {
+    const employee = await this.employeesRepository.findOne({ where: { id } });
+    if (!employee) throw new NotFoundException('employee not found');
+
+    return employee;
+  }
+
+  public async deleteEmployee(id: string) {
+    const employee = await this.employeesRepository.findOne({ where: { id } });
+    if (!employee) throw new NotFoundException('employee not found');
+
+    await this.employeesRepository.remove(employee);
+
+    return { message: 'employee deleted successfully' };
   }
 }
