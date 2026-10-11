@@ -10,6 +10,8 @@ import { AuthModule } from './auth/auth.module';
 import { Estate } from './estates/estate.entity';
 import { CropModule } from './crop/crop.module';
 import { Crop } from './crop/crop.entity';
+import { Employee } from './employees/employee.entity';
+import { EmployeesModule } from './employees/employees.module';
 
 @Module({
   imports: [
@@ -17,13 +19,14 @@ import { Crop } from './crop/crop.entity';
     EstatesModule,
     AuthModule,
     CropModule,
+    EmployeesModule,
 
     TypeOrmModule.forRootAsync({
       imports: [],
       inject: [],
       useFactory: () => ({
         type: 'postgres',
-        entities: [Owner, User, Estate, Crop],
+        entities: [Owner, User, Estate, Crop, Employee],
         synchronize: true,
         port: 5432,
         host: 'localhost',
