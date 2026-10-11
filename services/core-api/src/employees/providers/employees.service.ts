@@ -25,4 +25,8 @@ export class EmployeesService {
 
     return await this.employeesRepository.save(employee);
   }
+
+  public async findAll() {
+    return await this.employeesRepository.find();
+  }
 }

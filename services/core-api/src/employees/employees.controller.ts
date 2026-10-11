@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Inject,
   Param,
   ParseUUIDPipe,
@@ -26,5 +27,10 @@ export class EmployeesController {
     @Body() patchEmployeeDto: PatchEmployeeDto,
   ) {
     return this.employeesService.updateEmployee(id, patchEmployeeDto);
+  }
+
+  @Get()
+  public findAll() {
+    return this.employeesService.findAll();
   }
 }
