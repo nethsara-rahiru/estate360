@@ -1,11 +1,11 @@
-POST http://localhost:3000/estates/112
+POST http://localhost:3000/estates
 Content-Type: application/json
 
 {
-  "owner": "550e8400-e29b-41d4-a716-446655440000",
-  "crop": "37ec5e0c-9129-4524-bd2e-c3a70514b08c",
-  "name": "Green Valley Coconut Estate",
-  "code": "GV-001",
+  "name": "Hill Estate",
+  "code": "EST001",
+  "owner": "90859bce-1ac1-45b8-a81a-5c38c87975ef",
+  "crop": "20572ff2-1948-4333-9fd6-439bc4d8738b",
   "location": {
     "type": "Point",
     "coordinates": [80.6355, 6.9271]
@@ -24,3 +24,6 @@ Content-Type: application/json
   },
   "status": "active"
 }
+
+
+GET http://localhost:3000/estates

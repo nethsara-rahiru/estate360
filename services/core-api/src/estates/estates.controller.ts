@@ -16,7 +16,7 @@ export class EstatesController {
     console.log();
   }
 
-  @Post('/:id')
+  @Post()
   public create(@Body() createEstateDto: CreateEstateDto) {
     return this.estatesService.createEstate(createEstateDto);
   }

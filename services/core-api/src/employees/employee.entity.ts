@@ -2,10 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { EmployeeStatus } from './enums/employee-status.enum';
+import { EstateAssignment } from 'src/assignments/entities/estate-assignment.entity';
 
 @Entity({ name: 'employees' })
 export class Employee {
@@ -48,4 +50,7 @@ export class Employee {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
+
+  @OneToMany(() => EstateAssignment, (assignment) => assignment.employee)
+  estateAssignments!: EstateAssignment[];
 }

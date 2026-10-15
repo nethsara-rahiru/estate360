@@ -2,10 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { OwnerStatus } from './enums/owner-status.enum';
+import { Estate } from 'src/estates/estate.entity';
 
 @Entity({ name: 'owners' })
 export class Owner {
@@ -36,4 +38,7 @@ export class Owner {
 
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
   updatedAt!: Date;
+
+  @OneToMany(() => Estate, (estate) => estate.owner)
+  estates!: Estate[];
 }
