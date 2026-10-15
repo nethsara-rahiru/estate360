@@ -4,10 +4,11 @@ import { EstatesService } from './providers/estates.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Estate } from './estate.entity';
 import { Crop } from 'src/crop/crop.entity';
+import { Owner } from 'src/owners/owner.entity';
 
 @Module({
   controllers: [EstatesController],
   providers: [EstatesService],
-  imports: [TypeOrmModule.forFeature([Estate, Crop])],
+  imports: [TypeOrmModule.forFeature([Estate, Crop, Owner])],
 })
 export class EstatesModule {}

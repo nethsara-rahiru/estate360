@@ -12,6 +12,7 @@ import { CropModule } from './crop/crop.module';
 import { Crop } from './crop/crop.entity';
 import { Employee } from './employees/employee.entity';
 import { EmployeesModule } from './employees/employees.module';
+import { EstateAssignment } from './assignments/entities/estate-assignment.entity';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import { EmployeesModule } from './employees/employees.module';
       inject: [],
       useFactory: () => ({
         type: 'postgres',
-        entities: [Owner, User, Estate, Crop, Employee],
+        entities: [Owner, User, Estate, Crop, Employee, EstateAssignment],
         synchronize: true,
         port: 5432,
         host: 'localhost',

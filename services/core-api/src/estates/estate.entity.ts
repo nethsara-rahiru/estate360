@@ -4,19 +4,26 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { EstateStatus } from './enums/estate-status.enum';
 import { Crop } from 'src/crop/crop.entity';
+import { Owner } from 'src/owners/owner.entity';
+import { EstateAssignment } from 'src/assignments/entities/estate-assignment.entity';
 
 @Entity({ name: 'estates' })
 export class Estate {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column({ name: 'owner_id' })
-  owner!: string;
+  @ManyToOne(() => Owner, (owner) => owner.estates, {
+    nullable: false,
+    eager: true,
+  })
+  @JoinColumn({ name: 'owner_id' })
+  owner!: Owner;
 
   @ManyToOne(() => Crop, (crop) => crop.estates, {
     nullable: false,
@@ -59,4 +66,7 @@ export class Estate {
 
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
   updatedAt!: Date;
+
+  @OneToMany(() => EstateAssignment, (assignment) => assignment.estate)
+  estateAssignments!: EstateAssignment[];
 }

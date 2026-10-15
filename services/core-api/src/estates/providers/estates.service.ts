@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Estate } from '../estate.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Crop } from 'src/crop/crop.entity';
+import { Owner } from 'src/owners/owner.entity';
 
 @Injectable()
 export class EstatesService {
@@ -13,6 +14,9 @@ export class EstatesService {
 
     @InjectRepository(Crop)
     private readonly cropRepository: Repository<Crop>,
+
+    @InjectRepository(Owner)
+    private readonly ownerRepository: Repository<Owner>,
   ) {}
 
   public async createEstate(createEstateDto: CreateEstateDto) {
@@ -26,8 +30,16 @@ export class EstatesService {
 
     if (!crop) throw new NotFoundException('crop not found');
 
+    const owner = await this.ownerRepository.findOne({
+      where: {
+        id: createEstateDto.owner,
+      },
+    });
+
+    if (!owner) throw new NotFoundException('owner not found');
+
     const estate = this.estatesRepository.create({
-      owner: createEstateDto.owner,
+      owner,
       crop,
       name: createEstateDto.name,
       code: createEstateDto.code,
