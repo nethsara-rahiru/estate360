@@ -13,6 +13,7 @@ import { Crop } from './crop/crop.entity';
 import { Employee } from './employees/employee.entity';
 import { EmployeesModule } from './employees/employees.module';
 import { EstateAssignment } from './assignments/entities/estate-assignment.entity';
+import { AssignmentsModule } from './assignments/assignments.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { EstateAssignment } from './assignments/entities/estate-assignment.entit
     AuthModule,
     CropModule,
     EmployeesModule,
+    AssignmentsModule,
 
     TypeOrmModule.forRootAsync({
       imports: [],
