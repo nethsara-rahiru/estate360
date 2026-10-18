@@ -90,4 +90,18 @@ export class EstateAssignmentService {
 
     return this.estateAssignementRepository.save(assignment);
   }
+
+  public async findAllAssignments() {
+    return this.estateAssignementRepository.find();
+  }
+
+  public async findAssignmentById(id: string) {
+    const assignment = await this.estateAssignementRepository.findOne({
+      where: { id },
+    });
+
+    if (!assignment) throw new NotFoundException('assignment not found');
+
+    return assignment;
+  }
 }

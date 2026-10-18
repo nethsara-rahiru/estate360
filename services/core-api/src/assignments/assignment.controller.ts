@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Inject,
   Param,
   ParseUUIDPipe,
@@ -35,5 +36,15 @@ export class AssignmentsController {
       id,
       updateEstateAssignmentDto,
     );
+  }
+
+  @Get('/estate')
+  public getAllAssignments() {
+    return this.estateAssignmentService.findAllAssignments();
+  }
+
+  @Get('/estate/:id')
+  public getAssignmentById(@Param('id', ParseUUIDPipe) id: string) {
+    return this.estateAssignmentService.findAssignmentById(id);
   }
 }
