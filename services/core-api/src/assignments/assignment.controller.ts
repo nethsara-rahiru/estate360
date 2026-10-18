@@ -1,5 +1,5 @@
 import { Body, Controller, Inject, Post } from '@nestjs/common';
-import { createEstateAssignmentDto } from './dtos/estate-assignment/createEstateAssignmentDto';
+import { CreateEstateAssignmentDto } from './dtos/estate-assignment/createEstateAssignmentDto';
 import { EstateAssignmentService } from './providers/estate-assignment.service';
 
 @Controller('assignments')
@@ -10,8 +10,10 @@ export class AssignmentsController {
 
   @Post('/estate')
   public createEstateAssignment(
-    @Body() createEstateAssignmentDto: createEstateAssignmentDto,
+    @Body() createEstateAssignmentDto: CreateEstateAssignmentDto,
   ) {
-    return this.estateAssignmentService.create(createEstateAssignmentDto);
+    return this.estateAssignmentService.createAssignment(
+      createEstateAssignmentDto,
+    );
   }
 }
