@@ -104,4 +104,15 @@ export class EstateAssignmentService {
 
     return assignment;
   }
+
+  public async removeAssignment(id: string) {
+    const assignment = await this.estateAssignementRepository.findOne({
+      where: { id },
+    });
+
+    if (!assignment) throw new NotFoundException('assignment not found');
+
+    await this.estateAssignementRepository.remove(assignment);
+    return { message: 'assignment deleted successfully' };
+  }
 }
