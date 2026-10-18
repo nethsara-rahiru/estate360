@@ -1,6 +1,8 @@
 import {
   Body,
   Controller,
+  Delete,
+  Get,
   Inject,
   Param,
   ParseUUIDPipe,
@@ -35,5 +37,20 @@ export class AssignmentsController {
       id,
       updateEstateAssignmentDto,
     );
+  }
+
+  @Get('/estate')
+  public getAllEstateAssignments() {
+    return this.estateAssignmentService.findAllAssignments();
+  }
+
+  @Get('/estate/:id')
+  public getEstateAssignmentById(@Param('id', ParseUUIDPipe) id: string) {
+    return this.estateAssignmentService.findAssignmentById(id);
+  }
+
+  @Delete('/estate/:id')
+  public deleteEstateAssignment(@Param('id', ParseUUIDPipe) id: string) {
+    return this.estateAssignmentService.removeAssignment(id);
   }
 }
