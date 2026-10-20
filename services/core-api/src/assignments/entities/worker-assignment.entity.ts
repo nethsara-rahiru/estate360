@@ -3,11 +3,13 @@ import { Estate } from 'src/estates/estate.entity';
 import {
   Column,
   CreateDateColumn,
+  Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+@Entity({ name: 'worker_assignment' })
 export class WorkerAssignment {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
