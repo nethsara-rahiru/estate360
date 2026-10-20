@@ -12,6 +12,7 @@ import { EstateStatus } from './enums/estate-status.enum';
 import { Crop } from 'src/crop/crop.entity';
 import { Owner } from 'src/owners/owner.entity';
 import { EstateAssignment } from 'src/assignments/entities/estate-assignment.entity';
+import { WorkerAssignment } from 'src/assignments/entities/worker-assignment.entity';
 
 @Entity({ name: 'estates' })
 export class Estate {
@@ -69,4 +70,7 @@ export class Estate {
 
   @OneToMany(() => EstateAssignment, (assignment) => assignment.estate)
   estateAssignments!: EstateAssignment[];
+
+  @OneToMany(() => WorkerAssignment, (assignment) => assignment.estate)
+  Assignments!: WorkerAssignment[];
 }

@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { EmployeeStatus } from './enums/employee-status.enum';
 import { EstateAssignment } from 'src/assignments/entities/estate-assignment.entity';
+import { WorkerAssignment } from 'src/assignments/entities/worker-assignment.entity';
 
 @Entity({ name: 'employees' })
 export class Employee {
@@ -53,4 +54,10 @@ export class Employee {
 
   @OneToMany(() => EstateAssignment, (assignment) => assignment.employee)
   estateAssignments!: EstateAssignment[];
+
+  @OneToMany(() => WorkerAssignment, (assignment) => assignment.worker)
+  workerAssignments!: WorkerAssignment[];
+
+  @OneToMany(() => WorkerAssignment, (assignment) => assignment.supervisor)
+  supervisorAssignments!: WorkerAssignment[];
 }
