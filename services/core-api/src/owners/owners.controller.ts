@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { CreateOwnerDto } from './dtos/createOwnerDto';
 import { PatchOwnerDto } from './dtos/patchOwnerDto';
 import { OwnersService } from './providers/owners.service';
@@ -10,6 +10,11 @@ export class OwnersController {
   @Post()
   public createOwner(@Body() createOwnerDto: CreateOwnerDto) {
     return this.ownersService.createOwner(createOwnerDto);
+  }
+
+  @Get()
+  public findAll() {
+    return this.ownersService.findAllOwners();
   }
 
   @Patch('/:id')

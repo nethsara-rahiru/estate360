@@ -17,4 +17,12 @@ export class OwnersService {
 
     return owner;
   }
+
+  public async findAllOwners() {
+    return await this.ownersRepository.find();
+  }
+
+  public async updateOwner() {
+    
+  }
 }
