@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { WorkerAssignment } from '../entities/worker-assignment.entity';
@@ -8,7 +8,7 @@ import { CreateWorkerAssignmentDto } from '../dtos/worker-assignment/createWorke
 import { UpdateWorkerAssignmentDto } from '../dtos/worker-assignment/updateWorkerAssignmentDto';
 
 @Injectable()
-export class WorkerAssignmentService {
+export class WorkerAssignmentService implements OnModuleInit {
   constructor(
     @InjectRepository(WorkerAssignment)
     private readonly workerAssignmentRepository: Repository<WorkerAssignment>,
@@ -19,6 +19,21 @@ export class WorkerAssignmentService {
     @InjectRepository(Employee)
     private readonly employeeRepository: Repository<Employee>,
   ) {}
+
+  async onModuleInit() {
+    try {
+      await this.workerAssignmentRepository.query(`
+        DO $$
+        BEGIN
+          IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='worker_assignment' AND column_name='employee_id') THEN
+            UPDATE "worker_assignment" SET "worker_id" = "employee_id" WHERE "worker_id" IS NULL;
+          END IF;
+        END $$;
+      `);
+    } catch {
+      // Safe catch
+    }
+  }
 
   public async createAssignment(dto: CreateWorkerAssignmentDto) {
     const estate = await this.estateRepository.findOne({
@@ -38,10 +53,11 @@ export class WorkerAssignmentService {
     }
 
     let supervisor: Employee | null = null;
+    const supervisorId = dto.supervisorId ?? dto.superVisorId;
 
-    if (dto.superVisorId) {
+    if (supervisorId) {
       supervisor = await this.employeeRepository.findOne({
-        where: { id: dto.superVisorId },
+        where: { id: supervisorId },
       });
 
       if (!supervisor) {
@@ -91,12 +107,15 @@ export class WorkerAssignmentService {
       assignment.worker = worker;
     }
 
-    if (dto.superVisorId !== undefined) {
-      if (dto.superVisorId === null) {
+    const updatedSupervisorId =
+      dto.supervisorId !== undefined ? dto.supervisorId : dto.superVisorId;
+
+    if (updatedSupervisorId !== undefined) {
+      if (updatedSupervisorId === null) {
         assignment.supervisor = null;
       } else {
         const supervisor = await this.employeeRepository.findOne({
-          where: { id: dto.superVisorId },
+          where: { id: updatedSupervisorId },
         });
 
         if (!supervisor) {

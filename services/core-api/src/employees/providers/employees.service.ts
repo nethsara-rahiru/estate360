@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Employee } from '../employee.entity';
 import { Repository } from 'typeorm';
@@ -13,8 +17,24 @@ export class EmployeesService {
   ) {}
 
   public async createEmployee(createEmployeeDto: CreateEmployeeDto) {
-    const employee = this.employeesRepository.create(createEmployeeDto);
-    return await this.employeesRepository.save(employee);
+    const existing = await this.employeesRepository.findOne({
+      where: [
+        { employeeCode: createEmployeeDto.employeeCode },
+        { nic: createEmployeeDto.nic },
+      ],
+    });
+
+    if (existing) {
+      throw new ConflictException(
+        'An employee with this employee code or NIC already exists',
+      );
+    }
+
+    const employee = this.employeesRepository.create({
+      ...createEmployeeDto,
+      dateOfBirth: createEmployeeDto.dateOfBirth ?? createEmployeeDto.dob,
+    });
+    return this.employeesRepository.save(employee);
   }
 
   public async updateEmployee(id: string, patchEmployeeDto: PatchEmployeeDto) {
@@ -22,12 +42,19 @@ export class EmployeesService {
     if (!employee) throw new NotFoundException('employee not found');
 
     Object.assign(employee, patchEmployeeDto);
+    if (
+      patchEmployeeDto.dateOfBirth !== undefined ||
+      patchEmployeeDto.dob !== undefined
+    ) {
+      employee.dateOfBirth =
+        patchEmployeeDto.dateOfBirth ?? patchEmployeeDto.dob;
+    }
 
-    return await this.employeesRepository.save(employee);
+    return this.employeesRepository.save(employee);
   }
 
   public async findAllEmployees() {
-    return await this.employeesRepository.find();
+    return this.employeesRepository.find();
   }
 
   public async findOneEmployee(id: string) {

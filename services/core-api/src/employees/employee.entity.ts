@@ -3,53 +3,69 @@ import {
   CreateDateColumn,
   Entity,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { EmployeeStatus } from './enums/employee-status.enum';
 import { EstateAssignment } from 'src/assignments/entities/estate-assignment.entity';
 import { WorkerAssignment } from 'src/assignments/entities/worker-assignment.entity';
+import { EmployeePaymentDetail } from 'src/payment-details/payment-details.entity';
 
-@Entity({ name: 'employees' })
+@Entity({ name: 'employee' })
 export class Employee {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column({ name: 'employee_code', unique: true })
+  @Column({ name: 'employee_code', type: 'varchar', length: 50, unique: true })
   employeeCode!: string;
 
-  @Column({ name: 'first_name' })
+  @Column({ name: 'first_name', type: 'varchar', length: 100 })
   firstName!: string;
 
-  @Column({ name: 'last_name', nullable: true })
+  @Column({ name: 'last_name', type: 'varchar', length: 100, nullable: true })
   lastName?: string;
 
-  @Column({ unique: true })
+  @Column({ type: 'varchar', length: 20, unique: true })
   nic!: string;
 
-  @Column()
-  phone!: string;
+  @Column({ type: 'varchar', length: 30, nullable: true })
+  phone?: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'text', nullable: true })
   address?: string;
 
-  @Column({ nullable: true })
-  dob?: Date;
+  @Column({ name: 'date_of_birth', type: 'date', nullable: true })
+  dateOfBirth?: Date;
 
-  @Column({ name: 'date_joined', nullable: true })
+  get dob(): Date | undefined {
+    return this.dateOfBirth;
+  }
+
+  set dob(val: Date | undefined) {
+    this.dateOfBirth = val;
+  }
+
+  @Column({
+    name: 'date_joined',
+    type: 'date',
+    nullable: true,
+    default: () => 'CURRENT_DATE',
+  })
   dateJoined?: Date;
 
   @Column({
-    type: 'enum',
-    enum: EmployeeStatus,
+    type: 'varchar',
+    length: 20,
+    nullable: true,
     default: EmployeeStatus.INACTIVE,
   })
-  status!: EmployeeStatus;
+  status!: string;
 
-  @CreateDateColumn({ name: 'created_at' })
+  @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt!: Date;
 
-  @UpdateDateColumn({ name: 'updated_at' })
+  @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
   updatedAt!: Date;
 
   @OneToMany(() => EstateAssignment, (assignment) => assignment.employee)
@@ -60,4 +76,10 @@ export class Employee {
 
   @OneToMany(() => WorkerAssignment, (assignment) => assignment.supervisor)
   supervisorAssignments!: WorkerAssignment[];
+
+  @OneToOne(
+    () => EmployeePaymentDetail,
+    (paymentDetail) => paymentDetail.employee,
+  )
+  paymentDetail?: EmployeePaymentDetail;
 }

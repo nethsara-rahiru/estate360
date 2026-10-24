@@ -8,18 +8,25 @@ import {
   Matches,
   MaxLength,
   MinLength,
+  ValidateIf,
 } from 'class-validator';
 import { OwnerStatus } from '../enums/owner-status.enum';
 
 export class CreateOwnerDto {
   @IsString()
   @IsNotEmpty()
-  @MaxLength(64)
+  @MaxLength(150)
   name!: string;
 
+  @ValidateIf((o: CreateOwnerDto) => !o.contactEmail)
   @IsEmail()
   @IsNotEmpty()
-  contactEmail!: string;
+  email?: string;
+
+  @ValidateIf((o: CreateOwnerDto) => !o.email)
+  @IsEmail()
+  @IsNotEmpty()
+  contactEmail?: string;
 
   @Matches(
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
@@ -31,15 +38,15 @@ export class CreateOwnerDto {
   @IsNotEmpty()
   password!: string;
 
+  @IsOptional()
   @IsPhoneNumber('LK')
-  @IsNotEmpty()
-  phone!: string;
+  phone?: string;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
   @MinLength(3)
   @MaxLength(512)
-  address!: string;
+  address?: string;
 
   @IsOptional()
   @IsEnum(OwnerStatus)

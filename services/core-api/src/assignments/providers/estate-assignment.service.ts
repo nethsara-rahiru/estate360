@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateEstateAssignmentDto } from '../dtos/estate-assignment/createEstateAssignmentDto';
@@ -8,7 +8,7 @@ import { EstateAssignment } from '../entities/estate-assignment.entity';
 import { UpdateEstateAssignmentDto } from '../dtos/estate-assignment/updateEstateAssignmentDto';
 
 @Injectable()
-export class EstateAssignmentService {
+export class EstateAssignmentService implements OnModuleInit {
   constructor(
     @InjectRepository(EstateAssignment)
     private readonly estateAssignementRepository: Repository<EstateAssignment>,
@@ -19,6 +19,16 @@ export class EstateAssignmentService {
     @InjectRepository(Employee)
     private readonly employeesRepository: Repository<Employee>,
   ) {}
+
+  async onModuleInit() {
+    try {
+      await this.estateAssignementRepository.query(
+        `UPDATE "estate_assignment" SET "role" = 'supervisor' WHERE "role" IS NULL`,
+      );
+    } catch {
+      // Safe catch if database/table not ready yet
+    }
+  }
 
   public async createAssignment(
     createEstateAssignmentDto: CreateEstateAssignmentDto,
