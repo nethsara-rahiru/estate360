@@ -27,9 +27,9 @@ export class CreateEmployeeDto {
   @IsIdentityCard('LK')
   nic!: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsPhoneNumber('LK')
-  phone!: string;
+  phone?: string;
 
   @IsOptional()
   @IsString()
@@ -39,6 +39,11 @@ export class CreateEmployeeDto {
   @Type(() => Date)
   @IsDate()
   dob?: Date;
+
+  @IsOptional()
+  @Type(() => Date)
+  @IsDate()
+  dateOfBirth?: Date;
 
   @IsOptional()
   @Type(() => Date)
