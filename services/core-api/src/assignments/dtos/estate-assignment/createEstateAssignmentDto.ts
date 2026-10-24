@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 import { Role } from 'src/assignments/enums/role.enum';
 
-export class createEstateAssignmentDto {
+export class CreateEstateAssignmentDto {
   @IsNotEmpty()
   @IsUUID()
   estateId!: string;
