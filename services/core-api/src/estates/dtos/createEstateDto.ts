@@ -7,6 +7,7 @@ import {
   IsOptional,
   IsString,
   MinLength,
+  ValidateIf,
   ValidateNested,
 } from 'class-validator';
 import { EstateStatus } from '../enums/estate-status.enum';
@@ -31,13 +32,25 @@ export class PolygonDto {
 }
 
 export class CreateEstateDto {
+  @ValidateIf((o: CreateEstateDto) => !o.ownerId)
   @IsNotEmpty()
   @IsString()
-  owner!: string;
+  owner?: string;
 
+  @ValidateIf((o: CreateEstateDto) => !o.owner)
   @IsNotEmpty()
   @IsString()
-  crop!: string;
+  ownerId?: string;
+
+  @ValidateIf((o: CreateEstateDto) => !o.cropId)
+  @IsNotEmpty()
+  @IsString()
+  crop?: string;
+
+  @ValidateIf((o: CreateEstateDto) => !o.crop)
+  @IsNotEmpty()
+  @IsString()
+  cropId?: string;
 
   @IsNotEmpty()
   @IsString()
@@ -58,5 +71,5 @@ export class CreateEstateDto {
 
   @IsOptional()
   @IsEnum(EstateStatus)
-  status!: EstateStatus;
+  status?: EstateStatus;
 }
